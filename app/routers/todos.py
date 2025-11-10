@@ -15,7 +15,7 @@ router = APIRouter(
 
 @router.post("/", response_model=TodoResponse)
 def create_todo(todo: TodoCreate, current_user=Depends(get_current_user)):
-    todo_data = todo.model_dump()
+    todo_data = todo.model_dump(mode='json')
     todo_data["user_id"] = current_user.id  # Add the current user's ID
 
     try:
@@ -56,7 +56,7 @@ def update_todo_item(
         todo_update: TodoUpdate,
         current_user=Depends(get_current_user)
 ):
-    update_data = todo_update.model_dump(exclude_unset=True)
+    update_data = todo_update.model_dump(exclude_unset=True, mode='json')
 
     if not update_data:
         raise HTTPException(status_code=400, detail="No update data provided")
